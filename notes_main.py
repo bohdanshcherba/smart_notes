@@ -6,7 +6,7 @@ app = QApplication([])
 
 main_window = QWidget()
 
-main_window.setWindowTitle("Параметри")
+main_window.setWindowTitle("Нотатки")
 main_window.resize(1000,1000)
 
 
