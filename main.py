@@ -18,6 +18,10 @@ create_btn = QPushButton("Create note")
 btn_save = QPushButton("Save")
 delete_btn = QPushButton("Delete")
 
+add_tag_btn = QPushButton("Create note")
+search_tag_save = QPushButton("Save")
+delete_tag_btn = QPushButton("Delete")
+
 line1.addWidget(text)
 line2.addWidget(notes_list)
 line2.addWidget(create_btn)
@@ -26,18 +30,16 @@ line2.addWidget(delete_btn)
 
 line2.addWidget(tags_list)
 line2.addWidget(lineText)
-line2.addWidget(create_btn)
 
 
+line2.addWidget(search_tag_save)
+line2.addWidget(add_tag_btn)
+line2.addWidget(delete_tag_btn)
 
 mainline.addLayout(line1, stretch=2)
 mainline.addLayout(line2, stretch=1)
 
 window.setLayout(mainline)
-
-def writeFile():
-    with open("notes.json", "w", encoding="utf-8") as file:
-        json.dump(notes, file, ensure_ascii=True, sort_keys=True, indent=4)
 
 
 def save_note():
@@ -64,8 +66,34 @@ def show_note():
     text.setText(notes[note_name]['text'])
 
 def add_tag():
-    pass
+    note_name = notes_list.currentItem().text()
+    tag = lineText.text()
 
+    notes[note_name]["tags"].append(tag)
+    tags_list.addItem(tag)
+    writeFile()
+
+
+def writeFile():
+    with open("notes.json", "w", encoding="utf-8") as file:
+        json.dump(notes, file, ensure_ascii=True, sort_keys=True, indent=4)
+
+
+def del_tag():
+    note_name = notes_list.currentItem().text()
+    tag_name = tags_list.currentItem().text()
+
+    notes[note_name]["tags"].remove(tag_name)
+
+    tags_list.clear()
+    tags_list.addItems(notes[note_name]['tags'])
+
+    writeFile()
+
+
+
+
+add_tag_btn.clicked.connect(add_tag)
 
 notes_list.itemClicked.connect(show_note)
 
